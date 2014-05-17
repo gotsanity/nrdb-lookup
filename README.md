@@ -1,9 +1,7 @@
 NRDB-Lookup is a plugin for wordpress that is in the very early stages of development. The plugin is used to query netrunnerdb.com for card art and decklists. At the moment mouseovers and embeding of images is supported as well as automatic daily updating of the cardlist.
 
 ##INSALL:
-
 Download and place in plugins directory. Ensure assets/ is writable. Enable plugin in dashboard.
-
 
 ##How it works (shortcode examples):
 * To place a mouseover of a card: [nrdb]Off the Grid[/nrdb]
@@ -11,7 +9,6 @@ Download and place in plugins directory. Ensure assets/ is writable. Enable plug
 * To embed an image (centered, with larger image): [nrdb embed="center" size="large"]Off the Grid[/nrdb]
 * To float the embed left or right: [nrdb embed="left"]Off the Grid[/nrdb]
 * To embed a decklist (in development): [nrdb decklist="decklist-ID#"]Name of Deck[/nrdb]
-
 
 ##TODO:
 * Add support for decklists.
@@ -21,3 +18,6 @@ Download and place in plugins directory. Ensure assets/ is writable. Enable plug
 * Additional paramaters for embedding/mouseovers
 * Better handling of card names and fuzzy logic
 * Worpress WYSIWYG editing buttons.
+
+#More Info:
+http://www.olygaming.com and http://www.projectmulligan.com

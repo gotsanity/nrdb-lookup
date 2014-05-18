@@ -31,7 +31,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 function nrdb_function($atts, $content = null) {
 	// get file contents and decode
 	$dir = plugin_dir_path( __FILE__ );
-	//$lines_coded = file_get_contents("http://netrunnerdb.com/api/cards/");
 	$lines_coded = file_get_contents($dir."assets/cards.txt");
 	$lines = json_decode($lines_coded);
 
@@ -99,7 +98,8 @@ function nrdb_function($atts, $content = null) {
 		print "<div class='nrdb-decklist-name alignright'>".$deck['name']."</div>";
 		print "<div class='nrdb-decklist-cards'><ul>";
 		foreach ($deck['cards'] as $card => $qty) {
-			print "<li>".$card."x".$qty."</li>";
+			$current = nrdb_card($card);
+			print "<li>".$qty."x <a href='".$current['url']."' data-nrdb='http://netrunnerdb.com".$current['imagesrc']."'>".$current['title']."</a></li>";
 		}
 		print "</ul></div>";
 		print "</div>";
@@ -169,12 +169,25 @@ function closest_match($matches) {
 	return $return;
 }
 
+function nrdb_card($id) {
+	$dir = plugin_dir_path( __FILE__ );
+	$lines_coded = file_get_contents($dir."assets/cards.txt");
+	$lines = json_decode($lines_coded, true);
+	foreach ($lines as $key => $value) {
+		if ($value['code'] == $id) {
+			$me = $lines[$key];
+			return $me;
+		}
+	}
+}
+
 function normalize($string) {
 	// strip special characters and convert to lower case
 	$string = mb_strtolower($string, 'utf-8');
 	$string = mb_ereg_replace("[^A-Za-z0-9\w ]", "", $string);
 	return $string;
 }
+
 ?>
 
 

@@ -92,31 +92,46 @@ function nrdb_function($atts, $content = null) {
     curl_close($ch);
 
 		$deck = json_decode($decklist, true);
-		$output = "<pre>".print_r($deck, true)."</pre>";
 		
-		print "<div class='nrdb-decklist clearfix nrdb-embed-box'>";
+		print "<div class='nrdb-decklist clearfix nrdb-embed-box aligncenter'>";
 		print "<div class='clearfix'>";
 		print "<div class='nrdb-decklist-name'><h2>".$deck['name']."<h2></div>";
-		print "<div class='nrdb-decklist-name'><h4>Submitted by: ".$deck['username']." on ".date("F j, Y", $deck['creation'])."<h4></div>";
+		print "<div class='nrdb-decklist-name'><h4>Submitted by: ".$deck['username']." on ".date("F j, Y", strtotime($deck['creation']))."<h4></div>";
 		print "</div>";
 		print "<div class='nrdb-decklist-identity alignright'>";
 		$identity = nrdb_card(nrdb_ident($deck['cards']));
 		print "<a href='$identity[url]'><img class='alignright nrdb-embed-small' src='http://netrunnerdb.com$identity[imagesrc]' data-nrdb='http://netrunnerdb.com$identity[imagesrc]' /></a>";
 		print "</div>";
 		print "<div class='nrdb-decklist-cards'><ul>";
-		foreach ($deck['cards'] as $card => $qty) {
 		
+		// load and sort array of cards by type
+		foreach ($deck['cards'] as $card => $qty) {
+			// fill card details into deck array
 			$current = nrdb_card($card);
-			/* print "<pre>";
-			print_r($current);
-			print "</pre>"; */
-			if ($current['code'] != $identity['code']) {
-				print "<li>".$qty."x <a href='".$current['url']."' data-nrdb='http://netrunnerdb.com".$current['imagesrc']."'>".$current['title']."</a></li>";
+			$current['qty'] = $qty;
+			$deck['cards'][$card] = $current;
+			
+			// sort array
+			$types = array();
+			$names = array();
+			foreach ($deck['cards'] as $k => $v) {
+					$types[$k] = $v['type'];
+					$names[$k] = $v['title'];
+			}
+			array_multisort($types, SORT_ASC, $names, SORT_ASC, $deck['cards']);
+		}
+
+		// print out array of cards
+		foreach ($deck['cards'] as $card => $value) {
+			if ($card['code'] != $identity['code']) {
+				print "<li>".$value['type']." - ".$value['qty']."x <a href='".$value['url']."' data-nrdb='http://netrunnerdb.com".$value['imagesrc']."'>".$value['title']."</a></li>";
 			}
 		}
+
 		print "</ul></div>";
 		print "<div class='nrdb-decklist-description'>".$deck['description']."</div>";
 		print "</div>";
+		$output = "<pre>".print_r($deck, true)."</pre>";
 		return $output;
 	}
 	// return a match from the array of matched cards formatted as a link.

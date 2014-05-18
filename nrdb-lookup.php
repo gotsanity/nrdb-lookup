@@ -102,7 +102,7 @@ function nrdb_function($atts, $content = null) {
 		$identity = nrdb_card(nrdb_ident($deck['cards']));
 		print "<a href='$identity[url]'><img class='alignright nrdb-embed-small' src='http://netrunnerdb.com$identity[imagesrc]' data-nrdb='http://netrunnerdb.com$identity[imagesrc]' /></a>";
 		print "</div>";
-		print "<div class='nrdb-decklist-cards'><ul>";
+		print "<div class='nrdb-decklist-cards'>";
 		
 		// load and sort array of cards by type
 		foreach ($deck['cards'] as $card => $qty) {
@@ -114,19 +114,35 @@ function nrdb_function($atts, $content = null) {
 			// sort array
 			$types = array();
 			$names = array();
+			$subtype = array();
 			foreach ($deck['cards'] as $k => $v) {
 					$types[$k] = $v['type'];
 					$names[$k] = $v['title'];
 			}
 			array_multisort($types, SORT_ASC, $names, SORT_ASC, $deck['cards']);
 		}
-
+		
 		// print out array of cards
+		$prev = "jawa";
+		$subtype = "jarjar";
 		foreach ($deck['cards'] as $card => $value) {
-			if ($card['code'] != $identity['code']) {
-				print "<li>".$value['type']." - ".$value['qty']."x <a href='".$value['url']."' data-nrdb='http://netrunnerdb.com".$value['imagesrc']."'>".$value['title']."</a></li>";
+			if ($value['type'] != $prev && $value['type'] != "Identity") {
+				if ($prev != "jawa") {
+					print "</ul>";
+				}
+				$prev = $value['type'];
+				print "<h4>".$value['type']."</h4><ul class='nrdb-decklist-card-type'>";
+			}
+			if ($value['code'] != $identity['code']) {
+				print "<li>".$value['qty']."x <a href='".$value['url']."' data-nrdb='http://netrunnerdb.com".$value['imagesrc']."'>".$value['title']."</a>";
+				if ($value['type'] == "ICE") {
+					print " - ".$value['subtype']."</li>";
+				} else {
+					print "</li>";
+				}
 			}
 		}
+		print "</ul>";
 
 		print "</ul></div>";
 		print "<div class='nrdb-decklist-description'>".$deck['description']."</div>";

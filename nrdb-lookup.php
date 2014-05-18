@@ -95,13 +95,27 @@ function nrdb_function($atts, $content = null) {
 		$output = "<pre>".print_r($deck, true)."</pre>";
 		
 		print "<div class='nrdb-decklist clearfix nrdb-embed-box'>";
-		print "<div class='nrdb-decklist-name alignright'>".$deck['name']."</div>";
+		print "<div class='clearfix'>";
+		print "<div class='nrdb-decklist-name'><h2>".$deck['name']."<h2></div>";
+		print "<div class='nrdb-decklist-name'><h4>Submitted by: ".$deck['username']." on ".date("F j, Y", $deck['creation'])."<h4></div>";
+		print "</div>";
+		print "<div class='nrdb-decklist-identity alignright'>";
+		$identity = nrdb_card(nrdb_ident($deck['cards']));
+		print "<a href='$identity[url]'><img class='alignright nrdb-embed-small' src='http://netrunnerdb.com$identity[imagesrc]' data-nrdb='http://netrunnerdb.com$identity[imagesrc]' /></a>";
+		print "</div>";
 		print "<div class='nrdb-decklist-cards'><ul>";
 		foreach ($deck['cards'] as $card => $qty) {
+		
 			$current = nrdb_card($card);
-			print "<li>".$qty."x <a href='".$current['url']."' data-nrdb='http://netrunnerdb.com".$current['imagesrc']."'>".$current['title']."</a></li>";
+			/* print "<pre>";
+			print_r($current);
+			print "</pre>"; */
+			if ($current['code'] != $identity['code']) {
+				print "<li>".$qty."x <a href='".$current['url']."' data-nrdb='http://netrunnerdb.com".$current['imagesrc']."'>".$current['title']."</a></li>";
+			}
 		}
 		print "</ul></div>";
+		print "<div class='nrdb-decklist-description'>".$deck['description']."</div>";
 		print "</div>";
 		return $output;
 	}
@@ -179,6 +193,20 @@ function nrdb_card($id) {
 			return $me;
 		}
 	}
+}
+
+function nrdb_ident($cards) {
+	$dir = plugin_dir_path( __FILE__ );
+	$lines_coded = file_get_contents($dir."assets/cards.txt");
+	$lines = json_decode($lines_coded, true);
+	foreach ($cards as $k => $v) {
+		foreach ($lines as $key => $value) {
+			if ($k == $value['code'] && strtolower($value['type']) == "identity") {
+				return $value['code'];
+			}
+		}
+	}
+	return null;
 }
 
 function normalize($string) {

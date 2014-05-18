@@ -50,55 +50,66 @@ function nrdb_function($atts, $content = null) {
 		$lines = json_decode($lines_coded);
 	}
 
-	// setup needle to search for in the haystack
-	$needle = array($content);
+	// check for decklist $atts and process a decklist if present
+	if (empty($atts['decklist'])) {
+		// process embed and mouseover
+		// setup needle to search for in the haystack
+		$needle = array($content);
 
-	// walk through needle aray and find matches
-	foreach ($needle as $k => $v) {
-		$v = normalize($v);
-		$matches[] = find_matches($lines, $v);
-	}
+		// walk through needle aray and find matches
+		foreach ($needle as $k => $v) {
+			$v = normalize($v);
+			$matches[] = find_matches($lines, $v);
+		}
 
-	// set default size for embeded images	
-	if (!$atts['size']) {
-		$nrdb_size = "nrdb-embed-small";
-	} else {
-		$nrdb_size = "nrdb-embed-".$atts['size'];
-	}
+		// set default size for embeded images	
+		if (!$atts['size']) {
+			$nrdb_size = "nrdb-embed-small";
+		} else {
+			$nrdb_size = "nrdb-embed-".$atts['size'];
+		}
 
-	// run through output types and construct output
-	if (!empty($atts['embed'])) {
-		$nrdb_align = "align".$atts['embed'];
-		$output = "<a href='$matches[0]'><img class='$nrdb_align $nrdb_size nrdb-embed-box' src='$matches[0]' data-nrdb='$matches[0]' /></a>";
-	}
+		// run through output types and construct output
+		if (!empty($atts['embed'])) {
+			$nrdb_align = "align".$atts['embed'];
+			$output = "<a href='$matches[0]'><img class='$nrdb_align $nrdb_size nrdb-embed-box' src='$matches[0]' data-nrdb='$matches[0]' /></a>";
+		}
 	
-	if (!$atts['embed']) {
-		$output = "<a href='$matches[0]' data-nrdb='$matches[0]'>$content</a>";
+		if (!$atts['embed']) {
+			$output = "<a href='$matches[0]' data-nrdb='$matches[0]'>$content</a>";
+		}
+	} elseif (!empty($atts['decklist'])) {
+		// process decklist
+
+		// create curl resource
+    $ch = curl_init();
+    // set url
+    curl_setopt($ch, CURLOPT_URL, "http://netrunnerdb.com/api/decklist/".$atts['decklist']."?mode=embed");
+    //return the transfer as a string
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    // $output contains the output string
+    $decklist = curl_exec($ch);
+    // close curl resource to free up system resources
+    curl_close($ch);
+
+		$deck = json_decode($decklist, true);
+		$output = "<pre>".print_r($deck, true)."</pre>";
+		
+		print "<div class='nrdb-decklist clearfix nrdb-embed-box'>";
+		print "<div class='nrdb-decklist-name alignright'>".$deck['name']."</div>";
+		print "<div class='nrdb-decklist-cards'><ul>";
+		foreach ($deck['cards'] as $card => $qty) {
+			print "<li>".$card."x".$qty."</li>";
+		}
+		print "</ul></div>";
+		print "</div>";
+		return $output;
 	}
-	
 	// return a match from the array of matched cards formatted as a link.
 	return $output;
 }
 
 add_shortcode("nrdb", "nrdb_function");
-/*
-// get file contents and decode
-$lines_coded = file_get_contents("assets/cards.txt");
-$lines = json_decode($lines_coded);
-
-// setup needle to search for in the haystack
-$needle = array('armitage codebusting');
-
-// walk through needle aray and find matches
-foreach ($needle as $k => $v) {
-	$v = normalize($v);
-	$matches[] = find_matches($lines, $v);
-}
-
-// print a match from the array of matched cards
-print_match($matches[0]);
-*/
-
 
 // Functions
 function nrdb_load_js(){

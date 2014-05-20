@@ -127,13 +127,16 @@ function nrdb_function($atts, $content = null) {
 		$subtype = "jarjar";
 		foreach ($deck['cards'] as $card => $value) {
 			if ($value['type'] != $prev && $value['type'] != "Identity") {
-				if ($prev != "jawa") {
+				if ($prev != "jawa" || $prev != "ICE") {
 					print "</ul>";
 				}
-				$prev = $value['type'];
-				print "<h4>".$value['type']."</h4><ul class='nrdb-decklist-card-type'>";
+				
+				if ($value['type'] != "ICE") {
+					$prev = $value['type'];
+					print "<h4>".$value['type']."</h4><ul class='nrdb-decklist-card-type'>";
+				}
 			}
-			if ($value['code'] != $identity['code']) {
+			if ($value['code'] != $identity['code'] && $value['type'] != "ICE") {
 				print "<li>".$value['qty']."x <a href='".$value['url']."' data-nrdb='http://netrunnerdb.com".$value['imagesrc']."'>".$value['title']."</a>";
 				if ($value['type'] == "ICE") {
 					print " - ".$value['subtype']."</li>";
@@ -143,7 +146,63 @@ function nrdb_function($atts, $content = null) {
 			}
 		}
 		print "</ul>";
+		
+		foreach ($deck['cards'] as $key => $card) {
+			if ($card['type'] == "ICE") {
+				if (strpos($card['subtype'], "Barrier") !== false) {
+					$barrier[$key] = $card;
+				} elseif (strpos($card['subtype'], "Code Gate") !== false) {
+					$code_gate[$key] = $card;
+				} elseif (strpos($card['subtype'], "Sentry") !== false) {
+					$sentry[$key] = $card;
+				} elseif (strpos($card['subtype'], "Trap") !== false) {
+					$trap[$key] = $card;
+				} else {
+					$ice[$key] = $card;
+				}
+			}
+		}
+		
+		if (!empty($barrier)) {
+			print "<h4>ICE: Barrier</h4><ul class='nrdb-decklist-card-type'>";
+			foreach ($barrier as $key => $card) {
+				print "<li>".$card['qty']."x <a href='".$card['url']."' data-nrdb='http://netrunnerdb.com".$card['imagesrc']."'>".$card['title']."</a>";
+			}
+			print "</ul>";
+		}
 
+		if (!empty($code_gate)) {
+			print "<h4>ICE: Code Gate</h4><ul class='nrdb-decklist-card-type'>";
+			foreach ($code_gate as $key => $card) {
+				print "<li>".$card['qty']."x <a href='".$card['url']."' data-nrdb='http://netrunnerdb.com".$card['imagesrc']."'>".$card['title']."</a>";
+			}
+			print "</ul>";
+		}
+
+		if (!empty($sentry)) {
+			print "<h4>ICE: Sentry</h4><ul class='nrdb-decklist-card-type'>";
+			foreach ($sentry as $key => $card) {
+				print "<li>".$card['qty']."x <a href='".$card['url']."' data-nrdb='http://netrunnerdb.com".$card['imagesrc']."'>".$card['title']."</a>";
+			}
+			print "</ul>";
+		}
+
+		if (!empty($trap)) {
+			print "<h4>ICE: Trap</h4><ul class='nrdb-decklist-card-type'>";
+			foreach ($trap as $key => $card) {
+				print "<li>".$card['qty']."x <a href='".$card['url']."' data-nrdb='http://netrunnerdb.com".$card['imagesrc']."'>".$card['title']."</a>";
+			}
+			print "</ul>";
+		}
+
+		if (!empty($ice)) {
+			print "<h4>ICE: Other</h4><ul class='nrdb-decklist-card-type'>";
+			foreach ($ice as $key => $card) {
+				print "<li>".$card['qty']."x <a href='".$card['url']."' data-nrdb='http://netrunnerdb.com".$card['imagesrc']."'>".$card['title']."</a>";
+			}
+			print "</ul>";
+		}
+		
 		print "</ul></div>";
 		print "<div class='nrdb-decklist-description'>".$deck['description']."</div>";
 		print "</div>";

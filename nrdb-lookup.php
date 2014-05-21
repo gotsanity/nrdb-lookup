@@ -92,18 +92,8 @@ function nrdb_function($atts, $content = null) {
     curl_close($ch);
 
 		$deck = json_decode($decklist, true);
-		
-		print "<div class='nrdb-decklist clearfix nrdb-embed-box aligncenter'>";
-		print "<div class='clearfix'>";
-		print "<div class='nrdb-decklist-name'><h2>".$deck['name']."<h2></div>";
-		print "<div class='nrdb-decklist-name'><h4>Submitted by: ".$deck['username']." on ".date("F j, Y", strtotime($deck['creation']))."<h4></div>";
-		print "</div>";
-		print "<div class='nrdb-decklist-identity alignright'>";
 		$identity = nrdb_card(nrdb_ident($deck['cards']));
-		print "<a href='$identity[url]'><img class='alignright nrdb-embed-small' src='http://netrunnerdb.com$identity[imagesrc]' data-nrdb='http://netrunnerdb.com$identity[imagesrc]' /></a>";
-		print "</div>";
-		print "<div class='nrdb-decklist-cards'>";
-		
+
 		// load and sort array of cards by type
 		foreach ($deck['cards'] as $card => $qty) {
 			// fill card details into deck array
@@ -121,6 +111,19 @@ function nrdb_function($atts, $content = null) {
 			}
 			array_multisort($types, SORT_ASC, $names, SORT_ASC, $deck['cards']);
 		}
+
+				
+		print "<div class='nrdb-decklist clearfix nrdb-embed-box aligncenter'>";
+		print "<div class='clearfix'>";
+		print "<div class='nrdb-decklist-name'><h2>".$deck['name']."<h2></div>";
+		print "<div class='nrdb-decklist-name'><h4>Submitted by: ".$deck['username']." on ".date("F j, Y", strtotime($deck['creation']))."<h4></div>";
+		print "<div class='nrdb-decklist-counts'><p>".count_cards($deck['cards'])." cards (min ".$identity['minimumdecksize'].")</p></div>";
+		print "<div class='nrdb-decklist-counts'><p>".count_influence($deck['cards'], $identity)." influence spent (max ".$identity['influencelimit'].")</p></div>";
+		print "</div>";
+		print "<div class='nrdb-decklist-identity alignright'>";
+		print "<a href='$identity[url]'><img class='alignright nrdb-embed-small' src='http://netrunnerdb.com$identity[imagesrc]' data-nrdb='http://netrunnerdb.com$identity[imagesrc]' /></a>";
+		print "</div>";
+		print "<div class='nrdb-decklist-cards'>";
 		
 		// print out array of cards
 		$prev = "jawa";
@@ -328,6 +331,38 @@ function check_influence($card, $ident) {
 			return;
 		}
 	}
+}
+
+function count_cards($cards) {
+	$n = 0;
+	foreach ($cards as $k => $v) {
+		if ($v['type'] != "Identity") {
+			$n = $n + $v['qty'];
+		}
+	}
+	return $n;
+}
+
+function count_influence($cards, $ident) {
+	$n = 0;
+	foreach ($cards as $k => $v) {
+		if ($ident['title'] == "The Professor: Keeper of Knowledge") {
+			if ($v['faction'] != $ident['faction'] && $v['factioncost'] > 0) {
+				if ($v['type'] == "Program") {
+					if ($v['qty'] > 1) {
+						$n = $n + ($v['factioncost'] * ($v['qty'] - 1));
+					}
+				} else {
+					$n = ($n + ($v['factioncost']*$v['qty']));
+				}
+			}
+		} else {
+			if ($v['faction'] != $ident['faction'] && $v['factioncost'] > 0) {
+				$n = ($n + ($v['factioncost']*$v['qty']));
+			}
+		}
+	}
+	return $n;
 }
 
 ?>

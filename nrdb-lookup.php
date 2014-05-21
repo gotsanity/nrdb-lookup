@@ -316,7 +316,7 @@ function print_influence($card, $ident) {
 
 function check_influence($card, $ident) {
 	if ($card['faction'] != $ident['faction']) {
-		if ($ident['title'] == "The Professor Keeper of Knowledge") {
+		if ($ident['title'] == "The Professor: Keeper of Knowledge" && $card['type'] == "Program") {
 			if ($card['factioncost'] > 0 && $card['qty'] > 1) {
 				return ($card['factioncost'] * ($card['qty'] - 1));
 			} else {

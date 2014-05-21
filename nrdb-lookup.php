@@ -167,6 +167,8 @@ function nrdb_function($atts, $content = null) {
 			print "<h4>ICE: Barrier</h4><ul class='nrdb-decklist-card-type'>";
 			foreach ($barrier as $key => $card) {
 				print "<li>".$card['qty']."x <a href='".$card['url']."' data-nrdb='http://netrunnerdb.com".$card['imagesrc']."'>".$card['title']."</a>";
+				print_influence($card, $identity);
+				print "</li>";
 			}
 			print "</ul>";
 		}
@@ -175,6 +177,8 @@ function nrdb_function($atts, $content = null) {
 			print "<h4>ICE: Code Gate</h4><ul class='nrdb-decklist-card-type'>";
 			foreach ($code_gate as $key => $card) {
 				print "<li>".$card['qty']."x <a href='".$card['url']."' data-nrdb='http://netrunnerdb.com".$card['imagesrc']."'>".$card['title']."</a>";
+				print_influence($card, $identity);
+				print "</li>";
 			}
 			print "</ul>";
 		}
@@ -183,6 +187,8 @@ function nrdb_function($atts, $content = null) {
 			print "<h4>ICE: Sentry</h4><ul class='nrdb-decklist-card-type'>";
 			foreach ($sentry as $key => $card) {
 				print "<li>".$card['qty']."x <a href='".$card['url']."' data-nrdb='http://netrunnerdb.com".$card['imagesrc']."'>".$card['title']."</a>";
+				print_influence($card, $identity);
+				print "</li>";
 			}
 			print "</ul>";
 		}
@@ -191,6 +197,8 @@ function nrdb_function($atts, $content = null) {
 			print "<h4>ICE: Trap</h4><ul class='nrdb-decklist-card-type'>";
 			foreach ($trap as $key => $card) {
 				print "<li>".$card['qty']."x <a href='".$card['url']."' data-nrdb='http://netrunnerdb.com".$card['imagesrc']."'>".$card['title']."</a>";
+				print_influence($card, $identity);
+				print "</li>";
 			}
 			print "</ul>";
 		}
@@ -199,6 +207,8 @@ function nrdb_function($atts, $content = null) {
 			print "<h4>ICE: Other</h4><ul class='nrdb-decklist-card-type'>";
 			foreach ($ice as $key => $card) {
 				print "<li>".$card['qty']."x <a href='".$card['url']."' data-nrdb='http://netrunnerdb.com".$card['imagesrc']."'>".$card['title']."</a>";
+				print_influence($card, $identity);
+				print "</li>";
 			}
 			print "</ul>";
 		}

@@ -137,7 +137,9 @@ function nrdb_function($atts, $content = null) {
 				}
 			}
 			if ($value['code'] != $identity['code'] && $value['type'] != "ICE") {
-				print "<li>".$value['qty']."x <a href='".$value['url']."' data-nrdb='http://netrunnerdb.com".$value['imagesrc']."'>".$value['title']."</a>".print_influence($value, $identity)."</li>";
+				print "<li>".$value['qty']."x <a href='".$value['url']."' data-nrdb='http://netrunnerdb.com".$value['imagesrc']."'>".$value['title']."</a>";
+				print_influence($value, $identity);
+				print "</li>";
 			}
 		}
 		print "</ul>";
@@ -303,31 +305,27 @@ function normalize($string) {
 
 function print_influence($card, $ident) {
 	$cost = check_influence($card, $ident);
-	if ($cost == 0) {
-		return;
-	} elseif ($cost == 1) {
-		return " <span class='nrdb-influence'>&bull;</span>";
-	} elseif ($cost == 2) {
-		return " <span class='nrdb-influence'>&bull;&bull;</span>";
-	} elseif ($cost == 3) {
-		return " <span class='nrdb-influence'>&bull;&bull;&bull;</span>";
-	} elseif ($cost == 4) {
-		return " <span class='nrdb-influence'>&bull;&bull;&bull;&bull;</span>";
-	} elseif ($cost == 5) {
-		return " <span class='nrdb-influence'>&bull;&bull;&bull;&bull;&bull;</span>";
+	
+	print " <span class='nrdb-influence'>";
+	while ($cost > 0) {
+		print "&bull;";
+		$cost--;
 	}
+	print "</span>";
 }
 
 function check_influence($card, $ident) {
 	if ($card['faction'] != $ident['faction']) {
 		if ($ident['title'] == "The Professor Keeper of Knowledge") {
-			die("Prof decks are broken");
-		} else {
-			if ($card['factioncost'] != 0) {
-				return $card['factioncost'];
+			if ($card['factioncost'] > 0 && $card['qty'] > 1) {
+				return ($card['factioncost'] * ($card['qty'] - 1));
 			} else {
 				return;
 			}
+		} elseif ($card['factioncost'] != 0) {
+			return $card['factioncost'] * $card['qty'];
+		} else {
+			return;
 		}
 	}
 }

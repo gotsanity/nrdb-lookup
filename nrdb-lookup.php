@@ -149,7 +149,9 @@ function nrdb_function($atts, $content = null) {
 		
 		foreach ($deck['cards'] as $key => $card) {
 			if ($card['type'] == "ICE") {
-				if (strpos($card['subtype'], "Barrier") !== false) {
+				if (strpos($card['subtype'], "Sentry - Code Gate - Barrier") !== false) {
+					$ice[$key] = $card;
+				} elseif (strpos($card['subtype'], "Barrier") !== false) {
 					$barrier[$key] = $card;
 				} elseif (strpos($card['subtype'], "Code Gate") !== false) {
 					$code_gate[$key] = $card;

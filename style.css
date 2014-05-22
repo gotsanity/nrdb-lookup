@@ -63,11 +63,11 @@
 }
 
 .post-body .nrdb-decklist h4 {
-	margin: 7px 0px;
+	margin: 10px 0px 0px 0px;
 }
 
 .post-body .nrdb-decklist .nrdb-decklist-name h2 {
-	margin: 5px;
+	margin: 5px 0px;
 }
 
 .post-body .nrdb-decklist .nrdb-decklist-name h4 {
@@ -75,5 +75,17 @@
 }
 
 .post-body .nrdb-decklist .nrdb-decklist-identity img {
-	padding: 5px 15px;
+	padding: 10px;
+}
+
+.post-body .nrdb-decklist .nrdb-decklist-counts p {
+	margin: 0px 5px;
+}
+
+.post-body .nrdb-decklist div.nrdb-decklist-cards {
+	margin-left: 5px;
+}
+
+.post-body .nrdb-decklist span.nrdb-influence {
+	font-size: 1.3em;
 }

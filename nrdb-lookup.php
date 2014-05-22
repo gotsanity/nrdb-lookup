@@ -114,15 +114,13 @@ function nrdb_function($atts, $content = null) {
 
 				
 		print "<div class='nrdb-decklist clearfix nrdb-embed-box aligncenter'>";
-		print "<div class='clearfix'>";
+		print "<div class='nrdb-decklist-identity alignright'>";
+		print "<a href='$identity[url]'><img class='alignright nrdb-embed-small' src='http://netrunnerdb.com$identity[imagesrc]' data-nrdb='http://netrunnerdb.com$identity[imagesrc]' /></a>";
+		print "</div>";
 		print "<div class='nrdb-decklist-name'><h2>".$deck['name']."<h2></div>";
 		print "<div class='nrdb-decklist-name'><h4>Submitted by: ".$deck['username']." on ".date("F j, Y", strtotime($deck['creation']))."<h4></div>";
 		print "<div class='nrdb-decklist-counts'><p>".count_cards($deck['cards'])." cards (min ".$identity['minimumdecksize'].")</p></div>";
 		print "<div class='nrdb-decklist-counts'><p>".count_influence($deck['cards'], $identity)." influence spent (max ".$identity['influencelimit'].")</p></div>";
-		print "</div>";
-		print "<div class='nrdb-decklist-identity alignright'>";
-		print "<a href='$identity[url]'><img class='alignright nrdb-embed-small' src='http://netrunnerdb.com$identity[imagesrc]' data-nrdb='http://netrunnerdb.com$identity[imagesrc]' /></a>";
-		print "</div>";
 		print "<div class='nrdb-decklist-cards'>";
 		
 		// print out array of cards

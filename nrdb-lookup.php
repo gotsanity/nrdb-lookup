@@ -2,7 +2,7 @@
 
 /*
 Plugin Name: Netrunnerdb.com Lookup
-Plugin URI: http://www.reallyeffective.co.uk/knowledge-base
+Plugin URI: http://www.projectmulligan.com/netrunnerdb-lookups-for-wordpress/
 Description: A shortcode set to lookup named cards from netrunnerdb.com and display their cards on mouseover.
 Version: 0.3 BETA
 Author: Jesse Harlan
@@ -245,16 +245,6 @@ function find_matches($haystack = array(), $needle) {
 	}
 	return closest_match($matches);
 }
-
-/*
-function print_match($image) {
-	// find the closest match and get its image address
-	if ($image == false) {
-		print "<p>No image found!</p>";
-	} else {
-		echo "<img src='$image' />";
-	}
-} */
 
 function closest_match($matches) {
 	$sorted = array();

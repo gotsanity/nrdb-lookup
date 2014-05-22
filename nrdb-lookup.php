@@ -169,75 +169,13 @@ function nrdb_function($atts, $content = null) {
 			}
 		}
 		
-		if (!empty($barrier)) {
-			print "<h4>ICE: Barrier</h4><ul class='nrdb-decklist-card-type'>";
-			foreach ($barrier as $key => $card) {
-				print "<li>".$card['qty']."x <a href='".$card['url']."' data-nrdb='http://netrunnerdb.com".$card['imagesrc']."'>".$card['title']."</a>";
-				print_influence($card, $identity);
-				print "</li>";
-			}
-			print "</ul>";
-		}
-
-		if (!empty($code_gate)) {
-			print "<h4>ICE: Code Gate</h4><ul class='nrdb-decklist-card-type'>";
-			foreach ($code_gate as $key => $card) {
-				print "<li>".$card['qty']."x <a href='".$card['url']."' data-nrdb='http://netrunnerdb.com".$card['imagesrc']."'>".$card['title']."</a>";
-				print_influence($card, $identity);
-				print "</li>";
-			}
-			print "</ul>";
-		}
-
-		if (!empty($sentry)) {
-			print "<h4>ICE: Sentry</h4><ul class='nrdb-decklist-card-type'>";
-			foreach ($sentry as $key => $card) {
-				print "<li>".$card['qty']."x <a href='".$card['url']."' data-nrdb='http://netrunnerdb.com".$card['imagesrc']."'>".$card['title']."</a>";
-				print_influence($card, $identity);
-				print "</li>";
-			}
-			print "</ul>";
-		}
-
-		if (!empty($trap)) {
-			print "<h4>ICE: Trap</h4><ul class='nrdb-decklist-card-type'>";
-			foreach ($trap as $key => $card) {
-				print "<li>".$card['qty']."x <a href='".$card['url']."' data-nrdb='http://netrunnerdb.com".$card['imagesrc']."'>".$card['title']."</a>";
-				print_influence($card, $identity);
-				print "</li>";
-			}
-			print "</ul>";
-		}
-
-		if (!empty($ice)) {
-			print "<h4>ICE: Other</h4><ul class='nrdb-decklist-card-type'>";
-			foreach ($ice as $key => $card) {
-				print "<li>".$card['qty']."x <a href='".$card['url']."' data-nrdb='http://netrunnerdb.com".$card['imagesrc']."'>".$card['title']."</a>";
-				print_influence($card, $identity);
-				print "</li>";
-			}
-			print "</ul>";
-		}
-
-		if (!empty($icebreakers)) {
-			print "<h4>Icebreaker</h4><ul class='nrdb-decklist-card-type'>";
-			foreach ($icebreakers as $key => $card) {
-				print "<li>".$card['qty']."x <a href='".$card['url']."' data-nrdb='http://netrunnerdb.com".$card['imagesrc']."'>".$card['title']."</a>";
-				print_influence($card, $identity);
-				print "</li>";
-			}
-			print "</ul>";
-		}
-
-		if (!empty($programs)) {
-			print "<h4>Programs</h4><ul class='nrdb-decklist-card-type'>";
-			foreach ($programs as $key => $card) {
-				print "<li>".$card['qty']."x <a href='".$card['url']."' data-nrdb='http://netrunnerdb.com".$card['imagesrc']."'>".$card['title']."</a>";
-				print_influence($card, $identity);
-				print "</li>";
-			}
-			print "</ul>";
-		}
+		print_category($barrier, $identity, "ICE: Barrier");		
+		print_category($code_gate, $identity, "ICE: Code Gate");
+		print_category($sentry, $identity, "ICE: Sentry");
+		print_category($trap, $identity, "ICE: Trap");
+		print_category($ice, $identity, "ICE: Other");
+		print_category($icebreakers, $identity, "Icebreaker");
+		print_category($programs, $identity, "Programs");
 		
 		print "</ul></div>";
 		print "<div class='nrdb-decklist-description'>".$deck['description']."</div>";
@@ -389,6 +327,18 @@ function count_influence($cards, $ident) {
 		}
 	}
 	return $n;
+}
+
+function print_category($cards, $identity, $title) {
+	if (!empty($cards)) {
+		print "<h4>$title</h4><ul class='nrdb-decklist-card-type'>";
+		foreach ($cards as $key => $card) {
+			print "<li>".$card['qty']."x <a href='".$card['url']."' data-nrdb='http://netrunnerdb.com".$card['imagesrc']."'>".$card['title']."</a>";
+			print_influence($card, $identity);
+			print "</li>";
+		}
+		print "</ul>";
+	}
 }
 
 ?>

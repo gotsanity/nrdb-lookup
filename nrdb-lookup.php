@@ -4,7 +4,7 @@
 Plugin Name: Netrunnerdb.com Lookup
 Plugin URI: http://www.projectmulligan.com/netrunnerdb-lookups-for-wordpress/
 Description: A shortcode set to lookup named cards from netrunnerdb.com and display their cards on mouseover.
-Version: 0.3 BETA
+Version: 0.4 BETA
 Author: Jesse Harlan
 Author URI: http://www.insidiousdesigns.net
 */
@@ -132,12 +132,12 @@ function nrdb_function($atts, $content = null) {
 					print "</ul>";
 				}
 				
-				if ($value['type'] != "ICE") {
+				if ($value['type'] != "ICE" && $value['type'] != "Program") {
 					$prev = $value['type'];
 					print "<h4>".$value['type']."</h4><ul class='nrdb-decklist-card-type'>";
 				}
 			}
-			if ($value['code'] != $identity['code'] && $value['type'] != "ICE") {
+			if ($value['code'] != $identity['code'] && $value['type'] != "ICE" && $value['type'] != "Program") {
 				print "<li>".$value['qty']."x <a href='".$value['url']."' data-nrdb='http://netrunnerdb.com".$value['imagesrc']."'>".$value['title']."</a>";
 				print_influence($value, $identity);
 				print "</li>";
@@ -159,6 +159,12 @@ function nrdb_function($atts, $content = null) {
 					$trap[$key] = $card;
 				} else {
 					$ice[$key] = $card;
+				}
+			} elseif ($card['type'] == "Program") {
+				if (strpos($card['subtype'], "Icebreaker") !== false) {
+					$icebreakers[$key] = $card;
+				} else {
+					$programs[$key] = $card;
 				}
 			}
 		}
@@ -206,6 +212,26 @@ function nrdb_function($atts, $content = null) {
 		if (!empty($ice)) {
 			print "<h4>ICE: Other</h4><ul class='nrdb-decklist-card-type'>";
 			foreach ($ice as $key => $card) {
+				print "<li>".$card['qty']."x <a href='".$card['url']."' data-nrdb='http://netrunnerdb.com".$card['imagesrc']."'>".$card['title']."</a>";
+				print_influence($card, $identity);
+				print "</li>";
+			}
+			print "</ul>";
+		}
+
+		if (!empty($icebreakers)) {
+			print "<h4>Icebreaker</h4><ul class='nrdb-decklist-card-type'>";
+			foreach ($icebreakers as $key => $card) {
+				print "<li>".$card['qty']."x <a href='".$card['url']."' data-nrdb='http://netrunnerdb.com".$card['imagesrc']."'>".$card['title']."</a>";
+				print_influence($card, $identity);
+				print "</li>";
+			}
+			print "</ul>";
+		}
+
+		if (!empty($programs)) {
+			print "<h4>Programs</h4><ul class='nrdb-decklist-card-type'>";
+			foreach ($programs as $key => $card) {
 				print "<li>".$card['qty']."x <a href='".$card['url']."' data-nrdb='http://netrunnerdb.com".$card['imagesrc']."'>".$card['title']."</a>";
 				print_influence($card, $identity);
 				print "</li>";

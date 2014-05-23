@@ -66,19 +66,26 @@
 	margin: 10px 0px 0px 0px;
 }
 
-.post-body .nrdb-decklist .nrdb-decklist-name h2 {
+.post-body .nrdb-decklist .nrdb-decklist-name h2.nrdb-decklist-title {
 	margin: 5px 0px;
+	font-size: 18px;
 }
 
-.post-body .nrdb-decklist .nrdb-decklist-name h4 {
+.post-body .nrdb-decklist .nrdb-decklist-name h4.nrdb-decklist-meta {
 	margin: 5px;
+	font-size: 11px;
+}
+
+.post-body .nrdb-decklist .nrdb-decklist-name h4.nrdb-decklist-category {
+	margin: 5px;
+	font-size: 11px;
 }
 
 .post-body .nrdb-decklist .nrdb-decklist-identity img {
 	padding: 10px;
 }
 
-.post-body .nrdb-decklist .nrdb-decklist-counts p {
+.post-body .nrdb-decklist .nrdb-decklist-counts p.nrdb-decklist-count {
 	margin: 0px 5px;
 }
 
@@ -89,3 +96,5 @@
 .post-body .nrdb-decklist span.nrdb-influence {
 	font-size: 1.3em;
 }
+
+

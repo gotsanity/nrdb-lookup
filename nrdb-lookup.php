@@ -117,10 +117,10 @@ function nrdb_function($atts, $content = null) {
 		print "<div class='nrdb-decklist-identity alignright'>";
 		print "<a href='$identity[url]'><img class='alignright nrdb-embed-small' src='http://netrunnerdb.com$identity[imagesrc]' data-nrdb='http://netrunnerdb.com$identity[imagesrc]' /></a>";
 		print "</div>";
-		print "<div class='nrdb-decklist-name'><h2>".$deck['name']."<h2></div>";
-		print "<div class='nrdb-decklist-name'><h4>Submitted by: ".$deck['username']." on ".date("F j, Y", strtotime($deck['creation']))."<h4></div>";
-		print "<div class='nrdb-decklist-counts'><p>".count_cards($deck['cards'])." cards (min ".$identity['minimumdecksize'].")</p></div>";
-		print "<div class='nrdb-decklist-counts'><p>".count_influence($deck['cards'], $identity)." influence spent (max ".$identity['influencelimit'].")</p></div>";
+		print "<div class='nrdb-decklist-name'><h2 class='nrdb-decklist-title'>".$deck['name']."</h2></div>";
+		print "<div class='nrdb-decklist-name'><h4 class='nrdb-decklist-meta'>Submitted by: ".$deck['username']." on ".date("F j, Y", strtotime($deck['creation']))."</h4></div>";
+		print "<div class='nrdb-decklist-counts'><p class='nrdb-decklist-count'>".count_cards($deck['cards'])." cards (min ".$identity['minimumdecksize'].")</p></div>";
+		print "<div class='nrdb-decklist-counts'><p class='nrdb-decklist-count'>".count_influence($deck['cards'], $identity)." influence spent (max ".$identity['influencelimit'].")</p></div>";
 		print "<div class='nrdb-decklist-cards'>";
 		
 		// print out array of cards
@@ -134,7 +134,7 @@ function nrdb_function($atts, $content = null) {
 				
 				if ($value['type'] != "ICE" && $value['type'] != "Program") {
 					$prev = $value['type'];
-					print "<h4>".$value['type']."</h4><ul class='nrdb-decklist-card-type'>";
+					print "<h4 class='nrdb-decklist-category'>".$value['type']."</h4><ul class='nrdb-decklist-card-type'>";
 				}
 			}
 			if ($value['code'] != $identity['code'] && $value['type'] != "ICE" && $value['type'] != "Program") {
@@ -180,8 +180,8 @@ function nrdb_function($atts, $content = null) {
 		print "</ul></div>";
 		print "<div class='nrdb-decklist-description'>".$deck['description']."</div>";
 		print "</div>";
-		$output = "<pre>".print_r($deck, true)."</pre>";
-		return $output;
+		//$output = "<pre>".print_r($deck, true)."</pre>";
+		return;
 	}
 	// return a match from the array of matched cards formatted as a link.
 	return $output;
@@ -331,7 +331,7 @@ function count_influence($cards, $ident) {
 
 function print_category($cards, $identity, $title) {
 	if (!empty($cards)) {
-		print "<h4>$title</h4><ul class='nrdb-decklist-card-type'>";
+		print "<h4 class='nrdb-decklist-category'>$title</h4><ul class='nrdb-decklist-card-type'>";
 		foreach ($cards as $key => $card) {
 			print "<li>".$card['qty']."x <a href='".$card['url']."' data-nrdb='http://netrunnerdb.com".$card['imagesrc']."'>".$card['title']."</a>";
 			print_influence($card, $identity);

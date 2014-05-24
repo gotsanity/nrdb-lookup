@@ -2,7 +2,7 @@
     tinymce.create('tinymce.plugins.nrdbmouseover', {
         init : function(ed, url) {
             ed.addButton('nrdbmouseover', {
-                title : 'Add Nrdb-lookup Mouseover',
+                title : 'NRDB Mouseover',
                 image : url+'/mouseover.png',
                 onclick : function() {
                      ed.selection.setContent('[nrdb]' + ed.selection.getContent() + '[/nrdb]');

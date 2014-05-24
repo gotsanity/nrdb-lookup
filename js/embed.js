@@ -2,8 +2,8 @@
     tinymce.create('tinymce.plugins.nrdbembed', {
         init : function(ed, url) {
             ed.addButton('nrdbembed', {
-                title : 'Add Nrdb-lookup Embed',
-                image : url+'/mouseover.png',
+                title : 'Embed NRDB Card',
+                image : url+'/embed.png',
                 onclick : function() {
                 	var align = prompt("Align Left, Center, Right?", "left");
                 	var size = prompt("Display larger image?", "yes");

@@ -344,13 +344,14 @@ function print_category($cards, $identity, $title) {
 }
 
 function register_button( $buttons ) {
-	array_push($buttons, "nrdbmouseover", "nrdbembed");
+	array_push($buttons, "nrdbmouseover", "nrdbembed", "nrdbdecklist");
 	return $buttons;
 }
 
 function add_plugin( $plugin_array ) {
    $plugin_array['nrdbmouseover'] = plugins_url('nrdb-lookup') . '/js/mouseover.js';
    $plugin_array['nrdbembed'] = plugins_url('nrdb-lookup') . '/js/embed.js';
+   $plugin_array['nrdbdecklist'] = plugins_url('nrdb-lookup') . '/js/decklist.js';
    return $plugin_array;
 }
 

@@ -78,8 +78,10 @@ function nrdb_function($atts, $content = null) {
 			$output = "<a href='$matches[0]' data-nrdb='$matches[0]'>$content</a>";
 		}
 	} elseif (!empty($atts['decklist'])) {
-		// process decklist
+		// start output buffering so we can return the whole decklist in one go
+		ob_start();	
 
+		// process decklist
 		// create curl resource
     $ch = curl_init();
     // set url
@@ -112,8 +114,7 @@ function nrdb_function($atts, $content = null) {
 			array_multisort($types, SORT_ASC, $names, SORT_ASC, $deck['cards']);
 		}
 
-				
-		print "<div class='nrdb-decklist clearfix nrdb-embed-box aligncenter'>";
+		print "<div class='nrdb-decklist nrdb-embed-box'>";
 		print "<div class='nrdb-decklist-identity alignright'>";
 		print "<a href='$identity[url]'><img class='alignright nrdb-embed-small' src='http://netrunnerdb.com$identity[imagesrc]' data-nrdb='http://netrunnerdb.com$identity[imagesrc]' /></a>";
 		print "</div>";
@@ -181,7 +182,7 @@ function nrdb_function($atts, $content = null) {
 		print "<div class='nrdb-decklist-description'>".$deck['description']."</div>";
 		print "</div>";
 		//$output = "<pre>".print_r($deck, true)."</pre>";
-		return;
+		return ob_get_clean();
 	}
 	// return a match from the array of matched cards formatted as a link.
 	return $output;
@@ -191,10 +192,11 @@ add_shortcode("nrdb", "nrdb_function");
 
 // Functions
 function nrdb_load_js(){
-		wp_enqueue_style( 'nrdb-lookup_style', '/wp-content/plugins/nrdb-lookup/style.css' );
     wp_enqueue_script( 'nrdb-lookup_js', plugins_url( '/js/nrdb-lookup.js', __FILE__ ), array('jquery') );
+    wp_register_style('nrdb-lookup_style', '/wp-content/plugins/nrdb-lookup/style.css');
+		wp_enqueue_style( 'nrdb-lookup_style', '/wp-content/plugins/nrdb-lookup/style.css', '0.4' );
 }
-add_action('wp_enqueue_scripts', 'nrdb_load_js');
+add_action('wp_enqueue_scripts', 'nrdb_load_js', '9999');
 
 function find_matches($haystack = array(), $needle) {
 	// search through each card in the haystack and match against the needle.

@@ -54,47 +54,53 @@
 	list-style: none;
 }
 
-.post-body .nrdb-decklist.nrdb-embed-box {
+div ul.nrdb-decklist-card-type {
+	margin: 0px;
+}
+
+.nrdb-decklist.nrdb-embed-box {
 	padding: 10px;
 }
 
-.post-body .nrdb-decklist ul.nrdb-decklist-card-type {
+.nrdb-decklist ul.nrdb-decklist-card-type {
 	padding: 0px 10px;
 }
 
-.post-body .nrdb-decklist h4 {
+.nrdb-decklist h4 {
 	margin: 10px 0px 0px 0px;
 }
 
-.post-body .nrdb-decklist .nrdb-decklist-name h2.nrdb-decklist-title {
+.nrdb-decklist .nrdb-decklist-name h2.nrdb-decklist-title {
 	margin: 5px 0px;
 	font-size: 18px;
 }
 
-.post-body .nrdb-decklist .nrdb-decklist-name h4.nrdb-decklist-meta {
+.nrdb-decklist .nrdb-decklist-name h4.nrdb-decklist-meta {
 	margin: 5px;
 	font-size: 11px;
 }
 
-.post-body .nrdb-decklist .nrdb-decklist-name h4.nrdb-decklist-category {
+.nrdb-decklist h4.nrdb-decklist-category {
 	margin: 5px;
 	font-size: 11px;
 }
 
-.post-body .nrdb-decklist .nrdb-decklist-identity img {
+.nrdb-decklist .nrdb-decklist-identity img {
 	padding: 10px;
 }
 
-.post-body .nrdb-decklist .nrdb-decklist-counts p.nrdb-decklist-count {
+.nrdb-decklist .nrdb-decklist-counts p.nrdb-decklist-count {
 	margin: 0px 5px;
 }
 
-.post-body .nrdb-decklist div.nrdb-decklist-cards {
+.nrdb-decklist div.nrdb-decklist-cards {
 	margin-left: 5px;
 }
 
-.post-body .nrdb-decklist span.nrdb-influence {
+.nrdb-decklist span.nrdb-influence {
 	font-size: 1.3em;
 }
 
-
+.nrdb-decklist-description {
+	margin: 15px 5px 5px 5px;
+}

@@ -1,4 +1,4 @@
-<?
+<?php
 
 /*
 Plugin Name: Netrunnerdb.com Lookup

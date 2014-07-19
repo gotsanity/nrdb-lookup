@@ -62,7 +62,7 @@ function nrdb_function($atts, $content = null) {
 		}
 
 		// set default size for embeded images	
-		if (!$atts['size']) {
+		if (empty($atts['size'])) {
 			$nrdb_size = "nrdb-embed-small";
 		} else {
 			$nrdb_size = "nrdb-embed-".$atts['size'];
@@ -74,7 +74,7 @@ function nrdb_function($atts, $content = null) {
 			$output = "<a href='$matches[0]'><img class='$nrdb_align $nrdb_size nrdb-embed-box' src='$matches[0]' data-nrdb='$matches[0]' /></a>";
 		}
 	
-		if (!$atts['embed']) {
+		if (empty($atts['embed'])) {
 			$output = "<a href='$matches[0]' data-nrdb='$matches[0]'>$content</a>";
 		}
 	} elseif (!empty($atts['decklist'])) {

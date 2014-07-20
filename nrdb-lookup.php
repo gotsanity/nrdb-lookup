@@ -28,27 +28,30 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-function nrdb_function($atts, $content = null) {
-	// get file contents and decode
-	$dir = plugin_dir_path( __FILE__ );
+// get file contents and decode
+$dir = plugin_dir_path( __FILE__ );
+$lines_coded = file_get_contents($dir."assets/cards.txt");
+$lines = json_decode($lines_coded);
+
+if(date("Y-m-d") > date("Y-m-d", filemtime($dir."assets/cards.txt"))) {
+	// update card assets
+	set_time_limit(0);
+	$fp = fopen ($dir . 'assets/cards.txt', 'w+');//This is the file where we save the    information
+	$ch = curl_init("http://netrunnerdb.com/api/cards/");
+	curl_setopt($ch, CURLOPT_TIMEOUT, 50);
+	curl_setopt($ch, CURLOPT_FILE, $fp); // write curl response to file
+	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+	curl_exec($ch); // get curl response
+	curl_close($ch);
+	fclose($fp);
 	$lines_coded = file_get_contents($dir."assets/cards.txt");
 	$lines = json_decode($lines_coded);
+}
 
-	if(date("Y-m-d") > date("Y-m-d", filemtime($dir."assets/cards.txt"))) {
-		// update card assets
-		set_time_limit(0);
-		$fp = fopen ($dir . 'assets/cards.txt', 'w+');//This is the file where we save the    information
-		$ch = curl_init("http://netrunnerdb.com/api/cards/");
-		curl_setopt($ch, CURLOPT_TIMEOUT, 50);
-		curl_setopt($ch, CURLOPT_FILE, $fp); // write curl response to file
-		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-		curl_exec($ch); // get curl response
-		curl_close($ch);
-		fclose($fp);
-		$lines_coded = file_get_contents($dir."assets/cards.txt");
-		$lines = json_decode($lines_coded);
-	}
 
+// begin main function
+function nrdb_function($atts, $content = null) {
+	
 	// check for decklist $atts and process a decklist if present
 	if (empty($atts['decklist'])) {
 		// process embed and mouseover
@@ -58,7 +61,7 @@ function nrdb_function($atts, $content = null) {
 		// walk through needle aray and find matches
 		foreach ($needle as $k => $v) {
 			$v = normalize($v);
-			$matches[] = find_matches($lines, $v);
+			$matches[] = find_matches($GLOBALS['lines'], $v);
 		}
 
 		// set default size for embeded images	
@@ -79,8 +82,8 @@ function nrdb_function($atts, $content = null) {
 		}
 	} elseif (!empty($atts['decklist'])) {
 		// start output buffering so we can return the whole decklist in one go
-		ob_start();	
 
+		ob_start();	
 		// process decklist
 		// create curl resource
     $ch = curl_init();
@@ -102,7 +105,7 @@ function nrdb_function($atts, $content = null) {
 			$current = nrdb_card($card);
 			$current['qty'] = $qty;
 			$deck['cards'][$card] = $current;
-			
+		
 			// sort array
 			$types = array();
 			$names = array();
@@ -113,7 +116,7 @@ function nrdb_function($atts, $content = null) {
 			}
 			array_multisort($types, SORT_ASC, $names, SORT_ASC, $deck['cards']);
 		}
-
+		
 		print "<div class='nrdb-decklist nrdb-embed-box'>";
 		print "<div class='nrdb-decklist-identity alignright'>";
 		print "<a href='$identity[url]'><img class='alignright nrdb-embed-small' src='http://netrunnerdb.com$identity[imagesrc]' data-nrdb='http://netrunnerdb.com$identity[imagesrc]' /></a>";
@@ -188,7 +191,9 @@ function nrdb_function($atts, $content = null) {
 	return $output;
 }
 
+// hook into wordpress
 add_shortcode("nrdb", "nrdb_function");
+
 
 // Functions
 function nrdb_load_js(){
@@ -239,26 +244,23 @@ function closest_match($matches) {
 	return $return;
 }
 
+// function to return single card from assets
 function nrdb_card($id) {
-	$dir = plugin_dir_path( __FILE__ );
-	$lines_coded = file_get_contents($dir."assets/cards.txt");
-	$lines = json_decode($lines_coded, true);
-	foreach ($lines as $key => $value) {
-		if ($value['code'] == $id) {
-			$me = $lines[$key];
+	foreach ($GLOBALS['lines'] as $key => $value) {
+		if ($value->code == $id) {
+			$me = get_object_vars($GLOBALS['lines'][$key]);
 			return $me;
 		}
 	}
 }
 
+// function that returns the ID of the first identity found within a stack of cards
 function nrdb_ident($cards) {
-	$dir = plugin_dir_path( __FILE__ );
-	$lines_coded = file_get_contents($dir."assets/cards.txt");
-	$lines = json_decode($lines_coded, true);
 	foreach ($cards as $k => $v) {
-		foreach ($lines as $key => $value) {
-			if ($k == $value['code'] && strtolower($value['type']) == "identity") {
-				return $value['code'];
+		foreach ($GLOBALS['lines'] as $key => $value) {
+			if ($k == $value->code && strtolower($value->type) == "identity") {
+				$me = $value->code;
+				return $me;
 			}
 		}
 	}

@@ -4,7 +4,7 @@
 Plugin Name: Netrunnerdb.com Lookup
 Plugin URI: http://www.projectmulligan.com/netrunnerdb-lookups-for-wordpress/
 Description: A shortcode set to lookup named cards from netrunnerdb.com and display their cards on mouseover.
-Version: 0.4 BETA
+Version: 0.5 BETA
 Author: Jesse Harlan
 Author URI: http://www.insidiousdesigns.net
 */
